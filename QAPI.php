@@ -43,7 +43,7 @@ class Q
 		return json_decode($bulbs, true)['led'];
 	}
 	
-	public function set_bulb_name($bulb, $title='lightX')
+	public function set_bulb_title($bulb, $title='lightX')
 	{
 		$json = "{ 'cmd':'set_title', 'sn':'" . $bulb . "','title':'" . $title . "' }";
 		$this->q_send_command($json);
