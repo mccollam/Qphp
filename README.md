@@ -10,6 +10,10 @@ Methods:
 * set_on($bulbs, $bright=255) - Turn $bulbs on to the 'white' state (as a normal light bulb).  Brightness can be optionally specified.
 * set_off($bulbs) - Turn $bulbs off.
 * set_color($bulbs, $red=255, $green=255, $blue=255, $bright=255) - Set the color of $bulbs.  Any unspecified color or brightness will be set to full.
+* list_bulbs() - get an array of bulbs connected to the Q station
+* set_bulb_title($bulb, $title) - set the title of $bulb to $title
+* music_sync($bulb) - set $bulb to sync with music (NB: Currently there does not appear to be a way to unset this once set!  This is a limitation of the published Belleds API.)
+* delete($bulb) - delete $bulb from the Q station (NB: Currently there does not appear to be a way to add a bulb, so be cautious!  This is also a limitation of the published Belleds API.)
 
 Examples:
 ---------
@@ -24,4 +28,36 @@ Examples:
         
         // Set two bulbs to solid red (NB: no need to separately turn them on):
         $station->set_color(array('MD1AC44200000001', 'MD1AC44200000002'), 255, 0, 0);
+        
+        // List bulbs:
+        print_r($station->list_bulbs());
+        // Returns:
+        // Array
+		// (
+		// 	[0] => Array
+		// 		(
+		// 			[sn] => MD1AC4420000xxxx
+		// 			[title] => lightX
+		// 			[iswitch] => 0
+		// 			[music_sync] => 1
+		// 		)
+		// 
+		// 	[1] => Array
+		// 		(
+		// 			[sn] => MD1AC4420000xxxx
+		// 			[title] => Light Name
+		// 			[iswitch] => 0
+		// 			[music_sync] => 1
+		// 		)
+		// 
+		// 	[2] => Array
+		// 		(
+		// 			[sn] => MD1AC4420000xxxx
+		// 			[title] => Another bulb name
+		// 			[iswitch] => 0
+		// 			[music_sync] => 0
+		// 		)
+		// 
+		// )
+
         ?>
