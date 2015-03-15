@@ -15,14 +15,23 @@ class Q
 		$this->port = $port;
 	}
 
-	public function set_color($bulbs, $red=255, $green=255, $blue=255, $bright=255)
+	public function set_color($bulbs, $red=255, $green=255, $blue=255, $bright=100)
 	{
 		// Set the color of one or more bulbs
 		$this->q_send_command($this->build_json_light_control($bulbs, $red, $green, $blue, $bright, 1, 0, 9));
 		return true;
 	}
 	
-	public function set_on($bulbs, $bright=255)
+/*** FIXME: This is *really* flaky :(
+	public function set_brightness($bulbs, $bright=100)
+	{
+		// Set the brightness of one or more bulbs without changing the color
+		$this->q_send_command($this->build_json_light_control($bulbs, $red=null, $green=null, $blue=null, $bright, 1, 0, 9, $brightOnly=true));
+		return true;
+	}
+***/
+
+	public function set_on($bulbs, $bright=100)
 	{
 		// Set one or more bulbs to on as a standard ('white') bulb
 		$this->q_send_command($this->build_json_light_control($bulbs, 255, 255, 255, $bright, 1, 0, 8)); 
@@ -101,13 +110,15 @@ class Q
 		return $response;
 	}
 	
-	private function build_json_light_control($bulbs, $red, $green, $blue, $bright, $iswitch, $matchValue, $effect)
+	private function build_json_light_control($bulbs, $red, $green, $blue, $bright, $iswitch, $matchValue, $effect, $brightOnly=false)
 	{
 		if (!is_array($bulbs))
 			$bulbs = array($bulbs);
 		
 		$json = "{ 'cmd':'light_ctrl', ";
-		$json .= "'r':'$red', 'g':'$green', 'b':'$blue', 'bright':'$bright', ";
+		if (!$brightOnly)
+			$json .= "'r':'$red', 'g':'$green', 'b':'$blue', ";
+		$json .= "'bright':'$bright', ";
 		$json .= "'sn_list': [";
 		foreach ($bulbs as $bulb)
 			$json .= "{ 'sn':'$bulb' }, ";
